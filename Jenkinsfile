@@ -14,7 +14,7 @@ pipeline {
     }
     stage('Code Analysis with SonarQube') {
       environment {
-        SONAR_URL = "http://3.238.147.185:9000"
+        SONAR_URL = "http://52.23.168.115:70"
       }
       steps {
         withCredentials([string(credentialsId: 'sonarqube', variable: 'SONAR_AUTH_TOKEN')]) {
@@ -22,12 +22,12 @@ pipeline {
         }
       }
     }
-    stage('Build and Push Docker Image') {
+  //  stage('Build and Push Docker Image') {
       environment {
         DOCKER_IMAGE = "chaitannyaa/java_awesome-cicd:${BUILD_NUMBER}"
         REGISTRY_CREDENTIALS = credentials('dockerHub')
       }
-      steps {
+  //    steps {
         script {
             sh 'docker build -t ${DOCKER_IMAGE} .'
             def dockerImage = docker.image("${DOCKER_IMAGE}")
@@ -37,12 +37,12 @@ pipeline {
         }
       }
     }
-    stage('Update Deployment File') {
+ //   stage('Update Deployment File') {
         environment {
             GIT_REPO_NAME = "Jenkins_ArgoCD_Sonarcube_Java_Webapp_K8s"
             GIT_USER_NAME = "Chaitannyaa"
         }
-        steps {
+   //     steps {
             withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
                 sh '''
                     git config user.email "crmg26696@gmail.com"
